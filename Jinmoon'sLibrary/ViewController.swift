@@ -63,7 +63,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
         recentViewLabel.font = UIFont.boldSystemFont(ofSize: 30)
         
         
-        recentCollectionView.backgroundColor = .systemGray4
+        recentCollectionView.backgroundColor = .systemGray5
         recentCollectionView.dataSource = self
         recentCollectionView.delegate = self
         recentCollectionView.register(RecentCollectionViewCell.self, forCellWithReuseIdentifier: RecentCollectionViewCell.identifier)

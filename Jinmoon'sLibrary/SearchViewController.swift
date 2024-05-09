@@ -10,11 +10,11 @@ import SnapKit
 
 class SearchViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
     
-    var books: [Book] = [] {
-        didSet {
-            resultCollectionView.reloadData()
-        }
-    }
+//    var books: [Book] = [] {
+//        didSet {
+//            resultCollectionView.reloadData()
+//        }
+//    }
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +47,9 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     let resultLabel = UILabel()
     let bookSearchBar = UISearchBar()
     let backgroundView = UIView()
+    var currentPage = 1
+    var isLoading = false
+    var currentQuery = ""
     
     func configureUI() {
         view.addSubview(backgroundView)
@@ -87,15 +90,17 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
     }
     
-    func fetchBooks(query: String, completion: @escaping (SearchResults?, Error?) -> Void) {
+    func fetchBooks(query: String, page: Int, completion: @escaping (SearchResults?, Error?) -> Void) {
         let urlString = "https://dapi.kakao.com/v3/search/book"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("KakaoAK a9aa5c137dd8f1a1a8d8205837a88594", forHTTPHeaderField: "Authorization")
         let queryItem = URLQueryItem(name: "query", value: query)
+        let pageItem = URLQueryItem(name: "page", value: "\(page)")
+        let sizeItem = URLQueryItem(name: "size", value: "10")
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-        components?.queryItems = [queryItem]
+        components?.queryItems = [queryItem, pageItem, sizeItem]
         request.url = components?.url
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -128,12 +133,13 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         task.resume()
     }
 
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
            searchBar.resignFirstResponder()  // 키보드 숨기기
-
+            currentPage = 1
+        isLoading = false
            if let searchText = searchBar.text, !searchText.isEmpty {
-               fetchBooks(query: searchText) { [weak self] results, error in
+               fetchBooks(query: searchText, page: currentPage) { [weak self] results, error in
+                   self?.currentQuery = searchText
                    DispatchQueue.main.async {
                        if let results = results {
                            // 검색 결과를 화면에 표시하는 로직
@@ -172,6 +178,29 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         NotificationCenter.default.post(name: NSNotification.Name("UpdateRecentBooks"), object: nil)
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == SharedDataModel.shared.books.count - 1 {  // 마지막 셀에 도달했을 때 추가 로드
+                loadItems(page: currentPage)
+            }
+        }
+    
+    func loadItems(page: Int) {
+        guard !isLoading else { return }
+        isLoading = true
+
+        fetchBooks(query: currentQuery, page: page) { [weak self] results, error in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                if let results = results {
+                    SharedDataModel.shared.books.append(contentsOf: results.documents)
+                    self?.resultCollectionView.reloadData()
+                    self?.currentPage += 1  // 페이지 번호 증가
+                } else if let error = error {
+                    print("Error fetching more items: \(error)")
+                }
+            }
+        }
+    }
 }
 
 
