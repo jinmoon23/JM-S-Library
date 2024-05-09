@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class SearchCollectionViewCell: UICollectionViewCell {
+    
     static let identifier = "SearchCollectionViewCell"
     
     

@@ -44,26 +44,19 @@ class DetailViewController: UIViewController {
         view.addSubview(scrollView)
         view.addSubview(buttonStackView)
         scrollView.addSubview(contentView)
-        
-        //        contentView.addSubview(backView)
-        //        contentView.addSubview(backView)
+    
         contentView.addSubview(titleLabel)
         contentView.addSubview(authorLabel)
         contentView.addSubview(thumbnailImage)
         contentView.addSubview(priceLabel)
         contentView.addSubview(contentLabel)
-        //        backView.addSubview(buttonStackView)
-        
-        //        scrollView.backgroundColor = .white
         
         titleLabel.font = UIFont.boldSystemFont(ofSize: 25)
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
-//        authorLabel.font = UIFont.boldSystemFont(ofSize: 15)
         priceLabel.font = UIFont.boldSystemFont(ofSize: 20)
         thumbnailImage.contentMode = .scaleAspectFit
         contentLabel.numberOfLines = 100
-        //        backView.backgroundColor = .white
         
         cancelButton.setTitle("X", for: .normal)
         cancelButton.backgroundColor = .systemGray4
@@ -81,7 +74,6 @@ class DetailViewController: UIViewController {
         buttonStackView.distribution = .fill
         buttonStackView.alignment = .fill
         buttonStackView.spacing = 10
-        //        buttonStackView.backgroundColor = .white
         buttonStackView.addArrangedSubview(cancelButton)
         buttonStackView.addArrangedSubview(cartButton)
     }
@@ -107,8 +99,6 @@ class DetailViewController: UIViewController {
             } else {
                 book.setValue(Int64(0), forKey: "price") // 변환 실패 시 0으로 설정
             }
-//        book.setValue(Int64(priceLabel.text ?? "0"), forKey: "price")
-        // URL과 thumbnail 등의 다른 속성들도 여기에 추가
         
         do {
             try context.save()
@@ -142,9 +132,6 @@ class DetailViewController: UIViewController {
             make.width.equalTo(scrollView)
             make.height.equalTo(800)
         }
-        //        backView.snp.makeConstraints { make in
-        //            make.edges.equalToSuperview()
-        //        }
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
             make.centerX.equalToSuperview()
@@ -172,9 +159,6 @@ class DetailViewController: UIViewController {
             make.horizontalEdges.equalToSuperview().inset(10)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(50)
-            //            make.top.equalTo(contentLabel.snp.bottom).offset(10)
-            //            make.leading.trailing.equalToSuperview().inset(10)
-            //            make.bottom.equalToSuperview().offset(-40)
         }
         cancelButton.snp.makeConstraints { make in
             make.width.equalTo(cartButton.snp.width).multipliedBy(0.5)

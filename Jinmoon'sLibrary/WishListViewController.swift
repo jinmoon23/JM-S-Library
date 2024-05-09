@@ -11,6 +11,10 @@ import CoreData
 
 class WishListViewController: UIViewController {
     
+    var persistentContainer: NSPersistentContainer? {
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -20,10 +24,6 @@ class WishListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadBooks() // 데이터를 뷰가 나타날 때마다 새로고침
-    }
-    
-    var persistentContainer: NSPersistentContainer? {
-        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     }
     
     var books: [Book] = []
@@ -216,12 +216,5 @@ extension WishListViewController: UICollectionViewDelegate, UICollectionViewData
         let book = books[indexPath.row]
         cell.configureUI(with: book)
         return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, trailingSwipeActionsConfigurationForItemAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal, title: "Test", handler: { (action, view, completionHandler) in
-            print("Test action")
-            completionHandler(true)
-        })
-        return UISwipeActionsConfiguration(actions: [action])
     }
 }

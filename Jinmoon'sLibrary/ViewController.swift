@@ -10,11 +10,6 @@ import SnapKit
 
 class ViewController: UIViewController, UISearchBarDelegate {
     
-    var books: [Book] = [] {
-        didSet {
-            resultCollectionView.reloadData()
-        }
-    }
 
     let bookSearchBar = UISearchBar()
     let recentViewLabel = UILabel()
@@ -88,16 +83,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
         super.viewWillAppear(animated)
         resultCollectionView.reloadData()
         recentCollectionView.reloadData()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateRecentBooksCollectionView), name: NSNotification.Name("UpdateRecentBooks"), object: nil)
-//        if let newBook = SharedDataModel.shared.recentSelectedBooks {
-//            books.append(newBook)
-//            recentCollectionView.reloadData()
-//            SharedDataModel.shared.recentSelectedBooks = nil
-//        }
     }
-    @objc func updateRecentBooksCollectionView() {
-           recentCollectionView.reloadData()
-       }
     func setConstraints() {
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -183,7 +169,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             detailVC.book = book
             self.present(detailVC, animated: true, completion: nil)
         } else {
-//            let book = SharedDataModel.shared.books[indexPath.row]
             let selectedBooks = SharedDataModel.shared.recentSelectedBooks[indexPath.row]
             let detailVC = DetailViewController()
             detailVC.book = selectedBooks

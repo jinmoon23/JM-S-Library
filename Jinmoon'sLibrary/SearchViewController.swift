@@ -9,12 +9,6 @@ import UIKit
 import SnapKit
 
 class SearchViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
-    
-//    var books: [Book] = [] {
-//        didSet {
-//            resultCollectionView.reloadData()
-//        }
-//    }
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,7 +169,6 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         let detailVC = DetailViewController()
         detailVC.book = book
         self.present(detailVC, animated: true, completion: nil)
-        NotificationCenter.default.post(name: NSNotification.Name("UpdateRecentBooks"), object: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
