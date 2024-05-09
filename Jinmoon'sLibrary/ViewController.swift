@@ -15,7 +15,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
             resultCollectionView.reloadData()
         }
     }
-    
 
     let bookSearchBar = UISearchBar()
     let recentViewLabel = UILabel()
@@ -26,6 +25,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 0)
         layout.itemSize = .init(width: 50, height: 50)
         return layout
     }()
@@ -61,7 +62,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
         recentViewLabel.text = "최근 본 책"
         recentViewLabel.font = UIFont.boldSystemFont(ofSize: 30)
         
-        recentCollectionView.backgroundColor = .systemPink
+        
+        recentCollectionView.backgroundColor = .systemGray4
         recentCollectionView.dataSource = self
         recentCollectionView.delegate = self
         recentCollectionView.register(RecentCollectionViewCell.self, forCellWithReuseIdentifier: RecentCollectionViewCell.identifier)
@@ -86,13 +88,16 @@ class ViewController: UIViewController, UISearchBarDelegate {
         super.viewWillAppear(animated)
         resultCollectionView.reloadData()
         recentCollectionView.reloadData()
-        if let newBook = SharedDataModel.shared.recentSelectedBooks {
-            books.append(newBook)
-            recentCollectionView.reloadData()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateRecentBooksCollectionView), name: NSNotification.Name("UpdateRecentBooks"), object: nil)
+//        if let newBook = SharedDataModel.shared.recentSelectedBooks {
+//            books.append(newBook)
+//            recentCollectionView.reloadData()
 //            SharedDataModel.shared.recentSelectedBooks = nil
-        }
+//        }
     }
-    
+    @objc func updateRecentBooksCollectionView() {
+           recentCollectionView.reloadData()
+       }
     func setConstraints() {
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -107,8 +112,8 @@ class ViewController: UIViewController, UISearchBarDelegate {
         }
         recentCollectionView.snp.makeConstraints { make in
             make.top.equalTo(recentViewLabel.snp.bottom).offset(5)
-            make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(100)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(80)
         }
         resultLabel.snp.makeConstraints { make in
             make.top.equalTo(recentCollectionView.snp.bottom).offset(5)
@@ -120,7 +125,7 @@ class ViewController: UIViewController, UISearchBarDelegate {
             make.bottom.equalToSuperview().inset(10)
         }
     }
-    
+
     func setUpSearchBar() {
         
         bookSearchBar.delegate = self
@@ -146,7 +151,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         if collectionView == resultCollectionView {
             return SharedDataModel.shared.books.count
         } else {
-            return books.count
+            return SharedDataModel.shared.recentSelectedBooks.count
         }
         
     }
@@ -159,7 +164,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentCollectionViewCell.identifier, for: indexPath) as? RecentCollectionViewCell else {return UICollectionViewCell()}
-            let book = books[indexPath.row]
+            let book = SharedDataModel.shared.recentSelectedBooks[indexPath.row]
             cell.configureUI(with: book)
             return cell
         }
@@ -167,13 +172,24 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let book = SharedDataModel.shared.books[indexPath.row]
-        let selectedBooks = SharedDataModel.shared.books[indexPath.row]
+        if collectionView == resultCollectionView {
+            let book = SharedDataModel.shared.books[indexPath.row]       
+            let selectedBooks = SharedDataModel.shared.books[indexPath.row]
+            SharedDataModel.shared.recentSelectedBooks.append(selectedBooks)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.recentCollectionView.reloadData()
+                }
+            let detailVC = DetailViewController()
+            detailVC.book = book
+            self.present(detailVC, animated: true, completion: nil)
+        } else {
+//            let book = SharedDataModel.shared.books[indexPath.row]
+            let selectedBooks = SharedDataModel.shared.recentSelectedBooks[indexPath.row]
+            let detailVC = DetailViewController()
+            detailVC.book = selectedBooks
+            self.present(detailVC, animated: true, completion: nil)
+        }
         
-        SharedDataModel.shared.recentSelectedBooks = book
-        let detailVC = DetailViewController()
-        detailVC.book = book
-        self.present(detailVC, animated: true, completion: nil)
     }
 }
 

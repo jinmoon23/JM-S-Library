@@ -13,6 +13,7 @@ class RecentCollectionViewCell: UICollectionViewCell {
     
     var titleLabel = UILabel()
     var thumbnailImage = UIImageView()
+//    var priceLabel = UILabel()
     var stackView = UIStackView()
     var book: Book?
     
@@ -28,21 +29,31 @@ class RecentCollectionViewCell: UICollectionViewCell {
     
     func setupViews() {
         contentView.addSubview(titleLabel)
+//        contentView.addSubview(priceLabel)
         contentView.addSubview(thumbnailImage)
         contentView.addSubview(stackView)
         
         titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 10)
+        titleLabel.numberOfLines = 5
+        
+//        priceLabel.textAlignment = .center
+//        priceLabel.font = UIFont.systemFont(ofSize: 5)
+        
+        thumbnailImage.contentMode = .scaleAspectFit
         
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        stackView.spacing = 0
-        stackView.addArrangedSubview(titleLabel)
+        stackView.spacing = 2
         stackView.addArrangedSubview(thumbnailImage)
+        stackView.addArrangedSubview(titleLabel)
+//        stackView.addArrangedSubview(priceLabel)
     }
     
     func configureUI(with book: Book) {
-            titleLabel.text = book.title
+        titleLabel.text = book.title
+//        priceLabel.text = "\(book.price) 원"
         let urlString = book.thumbnail
         downloadImage(from: urlString)
     }

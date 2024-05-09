@@ -11,7 +11,6 @@ import CoreData
 
 
 class DetailViewController: UIViewController {
-    
 
     var persistentContainer: NSPersistentContainer? {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
@@ -86,19 +85,11 @@ class DetailViewController: UIViewController {
         buttonStackView.addArrangedSubview(cancelButton)
         buttonStackView.addArrangedSubview(cartButton)
     }
-    func addToRecentCollectionView() {
-        if let book = self.book {
-            SharedDataModel.shared.recentSelectedBooks = book
-        }
-            
-    }
     @objc func dismissViewController() {
         self.dismiss(animated: true, completion: nil)
-        addToRecentCollectionView()
     }
     
     @objc func addWishList() {
-        addToRecentCollectionView()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
         
@@ -110,7 +101,13 @@ class DetailViewController: UIViewController {
             let authors = authorText.components(separatedBy: ", ").joined(separator: ";") // 배열을 문자열로 변환
             book.setValue(authors, forKey: "authors")
         }
-        book.setValue(Int64(priceLabel.text ?? "0"), forKey: "price")
+        if let priceText = priceLabel.text?.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression, range: nil),
+               let price = Double(priceText) {
+                book.setValue(Int64(price), forKey: "price") // Double을 Int64로 변환
+            } else {
+                book.setValue(Int64(0), forKey: "price") // 변환 실패 시 0으로 설정
+            }
+//        book.setValue(Int64(priceLabel.text ?? "0"), forKey: "price")
         // URL과 thumbnail 등의 다른 속성들도 여기에 추가
         
         do {
@@ -192,11 +189,20 @@ class DetailViewController: UIViewController {
         if let book = book {
             titleLabel.text = book.title
             authorLabel.text = book.authors.joined(separator: ", ")
-            priceLabel.text = "<\(book.price)원>"
+            priceLabel.text = "<\(formatPrice(value: book.price))원>"
             contentLabel.text = book.contents
         }
         let urlString = book?.thumbnail
         downloadImage(from: urlString!)
+    }
+    
+    func formatPrice(value: Int) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal  // 숫자 스타일을 'decimal'로 설정합니다.
+        numberFormatter.groupingSeparator = "," // 구분자로 콤마 사용
+        numberFormatter.groupingSize = 3        // 세 자리수마다 구분자 적용
+
+        return numberFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
     }
     
     func downloadImage(from urlString: String) {

@@ -33,17 +33,16 @@ class WishListCollectionViewCell: UICollectionViewCell {
     }
     func setupViews() {
         titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 3
         authorLabel.textAlignment = .center
-        priceLabel.textAlignment = .center
+        authorLabel.numberOfLines = 3
+        priceLabel.textAlignment = .right
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
         stackView.spacing = 5
         
-        titleLabel.textColor = .black
-        priceLabel.textColor = .black
-        authorLabel.textColor = .black
         
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(authorLabel)
@@ -56,16 +55,26 @@ class WishListCollectionViewCell: UICollectionViewCell {
         
         titleLabel.text = book.title
         authorLabel.text = book.authors.joined(separator: ", ")
-        priceLabel.text = "\(book.price) 원"
+        priceLabel.text = "\(formatPrice(value: book.price))원"
         
     }
-    
+    func formatPrice(value: Int) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal  // 숫자 스타일을 'decimal'로 설정합니다.
+        numberFormatter.groupingSeparator = "," // 구분자로 콤마 사용
+        numberFormatter.groupingSize = 3        // 세 자리수마다 구분자 적용
+
+        return numberFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
     func setConstraints() {
         stackView.snp.makeConstraints{ make in
             make.edges.equalToSuperview()
         }
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(5)
+            make.leading.equalTo(contentView.snp.leading).inset(10)
+        }
+        priceLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(contentView.snp.trailing).inset(10)
         }
     }
 }

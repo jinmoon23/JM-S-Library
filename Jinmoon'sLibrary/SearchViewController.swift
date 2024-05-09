@@ -147,22 +147,9 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
        }
     
     func updateBooks(_ books: [Book]) {
-//           self.books = books
-//           self.resultCollectionView.reloadData()
         SharedDataModel.shared.books = books
         self.resultCollectionView.reloadData()
        }
-    
-    
-//    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-//        switchToSearchViewController()
-//        return false
-//    }
-//    
-//    private func switchToSearchViewController() {
-//        guard let tabBarController = self.tabBarController else { return }
-//                tabBarController.selectedIndex = 0  // 2번째 탭(인덱스 1)으로 전환
-//    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return SharedDataModel.shared.books.count
@@ -177,10 +164,12 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let book = SharedDataModel.shared.books[indexPath.row]
-        SharedDataModel.shared.recentSelectedBooks = book
+        let selectedBooks = SharedDataModel.shared.books[indexPath.row]
+        SharedDataModel.shared.recentSelectedBooks.append(selectedBooks)
         let detailVC = DetailViewController()
         detailVC.book = book
         self.present(detailVC, animated: true, completion: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateRecentBooks"), object: nil)
     }
     
 }

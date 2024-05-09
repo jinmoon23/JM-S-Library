@@ -63,7 +63,7 @@ class WishListViewController: UIViewController {
         listLabel.textAlignment = .center
         
         removeAllButton.setTitle("전체삭제", for: .normal)
-        removeAllButton.addTarget(self, action: #selector(removeList), for: .touchUpInside)
+        removeAllButton.addTarget(self, action: #selector(removeAllList), for: .touchUpInside)
         addButton.setTitle("추가하기", for: .normal)
         addButton.addTarget(self, action: #selector(moveToSearch), for: .touchUpInside)
         
@@ -89,12 +89,12 @@ class WishListViewController: UIViewController {
                 tabBarController.selectedIndex = 0  // 1번째 탭(인덱스 0)으로 전환
     }
     
-    @objc func removeList() {
-        let alertController = UIAlertController(title: "Delete All Books", message: "Are you sure you want to delete all books?", preferredStyle: .alert)
-            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+    @objc func removeAllList() {
+        let alertController = UIAlertController(title: "담은 책을 모두 삭제합니다", message: "정말 담은 모든 책을 삭제하시겠어요?", preferredStyle: .alert)
+            let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
                 self?.deleteAllItems()
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
 
             alertController.addAction(deleteAction)
             alertController.addAction(cancelAction)
@@ -133,12 +133,12 @@ class WishListViewController: UIViewController {
     }
     
     func presentDeletionAlert(for indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "Delete Book", message: "Are you sure you want to delete this book?", preferredStyle: .alert)
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        let alertController = UIAlertController(title: "담은 책을 삭제합니다", message: "정말 삭제 하시겠어요?", preferredStyle: .alert)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             self.deleteItem(at: indexPath)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
@@ -217,42 +217,6 @@ extension WishListViewController: UICollectionViewDelegate, UICollectionViewData
         cell.configureUI(with: book)
         return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, trailingSwipeActionsConfigurationForItemAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        // 삭제 액션 생성
-//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completionHandler) in
-//            guard let self = self else { return }
-//            // CoreData에서 데이터 삭제
-//            self.deleteItem(at: indexPath)
-//            // 컬렉션 뷰에서 셀 삭제
-//            collectionView.deleteItems(at: [indexPath])
-//            completionHandler(true)
-//        }
-//        deleteAction.backgroundColor = .red
-//
-//        return UISwipeActionsConfiguration(actions: [deleteAction])
-//    }
-//    
-//    func deleteItem(at indexPath: IndexPath) {
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        let context = appDelegate.persistentContainer.viewContext
-//        let titleToDelete = books[indexPath.row].title
-//
-//        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "BookData")
-//        fetchRequest.predicate = NSPredicate(format: "title == %@", titleToDelete)
-//
-//        do {
-//            let results = try context.fetch(fetchRequest)
-//            if let bookToDelete = results.first {
-//                context.delete(bookToDelete)
-//                try context.save()
-//                books.remove(at: indexPath.row)
-//                listCollectionView.deleteItems(at: [indexPath])
-//            }
-//        } catch let error as NSError {
-//            print("Failed to delete book: \(error), \(error.userInfo)")
-//        }
-//    }
     func collectionView(_ collectionView: UICollectionView, trailingSwipeActionsConfigurationForItemAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .normal, title: "Test", handler: { (action, view, completionHandler) in
             print("Test action")
