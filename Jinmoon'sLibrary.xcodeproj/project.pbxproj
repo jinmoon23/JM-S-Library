@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE15E6932BE4D27C00C2326D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CE15E6922BE4D27C00C2326D /* Alamofire */; };
-		CE15E6952BE4D27C00C2326D /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = CE15E6942BE4D27C00C2326D /* AlamofireDynamic */; };
 		CE4ABFAD2BEB8E4B00A33DB2 /* RecentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABFAC2BEB8E4B00A33DB2 /* RecentCollectionViewCell.swift */; };
 		CE949D3A2BEA4EEB00E0A457 /* BookData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE949D382BEA4EEB00E0A457 /* BookData.xcdatamodeld */; };
 		CEA842AB2BEA2EAF0051139C /* WishListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA842AA2BEA2EAF0051139C /* WishListCollectionViewCell.swift */; };
@@ -51,14 +49,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				CECEAD7F2BE39407008A3E3C /* SnapKit in Frameworks */,
-				CE15E6952BE4D27C00C2326D /* AlamofireDynamic in Frameworks */,
-				CE15E6932BE4D27C00C2326D /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE3784592BED9A0E009322EA /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CECEAD6D2BE393F3008A3E3C /* ViewController.swift */,
+				CE4ABFAC2BEB8E4B00A33DB2 /* RecentCollectionViewCell.swift */,
+				CECEAD862BE3B85C008A3E3C /* SearchViewController.swift */,
+				CECEAD882BE3BE4B008A3E3C /* SearchCollectionViewCell.swift */,
+				CECEAD822BE39553008A3E3C /* DetailViewController.swift */,
+				CECEAD842BE39572008A3E3C /* WishListViewController.swift */,
+				CEA842AA2BEA2EAF0051139C /* WishListCollectionViewCell.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		CECEAD5D2BE393F3008A3E3C = {
 			isa = PBXGroup;
 			children = (
@@ -78,17 +88,11 @@
 		CECEAD682BE393F3008A3E3C /* Jinmoon'sLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				CE3784592BED9A0E009322EA /* ViewController */,
 				CECEAD692BE393F3008A3E3C /* AppDelegate.swift */,
 				CECEAD6B2BE393F3008A3E3C /* SceneDelegate.swift */,
-				CE949D382BEA4EEB00E0A457 /* BookData.xcdatamodeld */,
 				CECEAD802BE39443008A3E3C /* BookModel.swift */,
-				CECEAD6D2BE393F3008A3E3C /* ViewController.swift */,
-				CE4ABFAC2BEB8E4B00A33DB2 /* RecentCollectionViewCell.swift */,
-				CECEAD862BE3B85C008A3E3C /* SearchViewController.swift */,
-				CECEAD882BE3BE4B008A3E3C /* SearchCollectionViewCell.swift */,
-				CECEAD822BE39553008A3E3C /* DetailViewController.swift */,
-				CECEAD842BE39572008A3E3C /* WishListViewController.swift */,
-				CEA842AA2BEA2EAF0051139C /* WishListCollectionViewCell.swift */,
+				CE949D382BEA4EEB00E0A457 /* BookData.xcdatamodeld */,
 				CECEAD6F2BE393F3008A3E3C /* Main.storyboard */,
 				CECEAD722BE393F6008A3E3C /* Assets.xcassets */,
 				CECEAD742BE393F6008A3E3C /* LaunchScreen.storyboard */,
@@ -115,8 +119,6 @@
 			name = "Jinmoon'sLibrary";
 			packageProductDependencies = (
 				CECEAD7E2BE39407008A3E3C /* SnapKit */,
-				CE15E6922BE4D27C00C2326D /* Alamofire */,
-				CE15E6942BE4D27C00C2326D /* AlamofireDynamic */,
 			);
 			productName = "Jinmoon'sLibrary";
 			productReference = CECEAD662BE393F3008A3E3C /* Jinmoon'sLibrary.app */;
@@ -148,7 +150,6 @@
 			mainGroup = CECEAD5D2BE393F3008A3E3C;
 			packageReferences = (
 				CECEAD7D2BE39407008A3E3C /* XCRemoteSwiftPackageReference "SnapKit" */,
-				CE15E6912BE4D27C00C2326D /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = CECEAD672BE393F3008A3E3C /* Products */;
 			projectDirPath = "";
@@ -412,14 +413,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CE15E6912BE4D27C00C2326D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.9.1;
-			};
-		};
 		CECEAD7D2BE39407008A3E3C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -431,16 +424,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CE15E6922BE4D27C00C2326D /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CE15E6912BE4D27C00C2326D /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		CE15E6942BE4D27C00C2326D /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CE15E6912BE4D27C00C2326D /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
-		};
 		CECEAD7E2BE39407008A3E3C /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CECEAD7D2BE39407008A3E3C /* XCRemoteSwiftPackageReference "SnapKit" */;
